@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: way.notification
+  config:
+    import:
+      - application-db.yml
+  data:
+    mongodb:
+#      host: ${MONGODB_DB_HOST}
+#      port: 27017
+#      authentication-database: ${MONGODB_DB_AUTHENTICATION_DATABASE}
+#      database: ${MONGODB_DB_DATABASE}
+#      username: ${MONGODB_DB_USER}
+#      password: ${MONGODB_DB_PASSWORD}
+      uri: ${MONGO_DB_URI}
+  kafka:
+    bootstrap-servers: 10.109.201.158:9092
+    template:
+      default-topic: follow
+    consumer:
+      group-id: group-1
+      auto-offset-reset: earliest
+      topics:
+        - follow
+        - post
+        - comment
+        - like
