@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Notification {
 
     @MongoId
-    private Long id;
+    private String id;
     private String nickname;
     private String message;
     private LocalDateTime createdAt;

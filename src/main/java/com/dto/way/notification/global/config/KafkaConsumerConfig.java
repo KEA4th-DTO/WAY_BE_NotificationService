@@ -20,11 +20,14 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupID;
+
     @Bean
     public ConsumerFactory<String, NotificationMessage> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "group_1");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
         JsonDeserializer<NotificationMessage> deserializer = new JsonDeserializer<>(NotificationMessage.class);
