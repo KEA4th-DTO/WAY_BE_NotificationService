@@ -1,0 +1,7 @@
+MONGODB_DB_HOST: localhost
+MONGODB_DB_PORT: 27017
+MONGODB_DB_AUTHENTICATION_DATABASE: admin
+MONGODB_DB_DATABASE: way_notification
+
+MONGODB_DB_URI: mongodb+srv://shc3113:1234@dto1.gqe0atf.mongodb.net/way?retryWrites=true&w=majority&appName=DTO1
+

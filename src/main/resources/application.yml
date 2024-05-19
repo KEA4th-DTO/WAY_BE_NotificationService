@@ -4,6 +4,7 @@ spring:
   config:
     import:
       - application-db.yml
+      - application-keys.yml
   data:
     mongodb:
 #      host: ${MONGODB_DB_HOST}
@@ -12,7 +13,7 @@ spring:
 #      database: ${MONGODB_DB_DATABASE}
 #      username: ${MONGODB_DB_USER}
 #      password: ${MONGODB_DB_PASSWORD}
-      uri: ${MONGO_DB_URI}
+      uri: ${MONGODB_DB_URI}
   kafka:
     bootstrap-servers: 10.109.201.158:9092
     template:
