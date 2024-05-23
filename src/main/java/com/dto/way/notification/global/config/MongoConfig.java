@@ -23,7 +23,7 @@ public class MongoConfig {
     @Autowired
     private MongoMappingContext mongoMappingContext;
 
-    @Value("${SPRING_MONGODB_DB_URI}")
+    @Value("${SPRING_DATA_MONGODB_URI}")
     private String mongoDBConnection;
 
     @Bean
