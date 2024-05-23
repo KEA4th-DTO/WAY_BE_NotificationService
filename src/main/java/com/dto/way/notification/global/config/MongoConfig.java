@@ -4,6 +4,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +16,14 @@ import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
+@Slf4j
 @Configuration
 public class MongoConfig {
 
     @Autowired
     private MongoMappingContext mongoMappingContext;
 
-    @Value("${MONGODB_DB_URI}")
+    @Value("${SPRING_MONGODB_DB_URI}")
     private String mongoDBConnection;
 
     @Bean
@@ -37,6 +39,7 @@ public class MongoConfig {
 
     @Bean
     public MongoClient mongoClient() {
+        log.info("mongoDBConnection = {}", mongoDBConnection);
         ConnectionString connectionString = new ConnectionString(mongoDBConnection);
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
