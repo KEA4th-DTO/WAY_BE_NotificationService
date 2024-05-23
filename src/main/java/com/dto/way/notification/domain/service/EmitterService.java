@@ -24,7 +24,7 @@ public class EmitterService {
     private final NotificationService notificationService;
     private final EmitterRepository emitterRepository;
 
-    @KafkaListener(topics = "follow", groupId = "group_1")
+    @KafkaListener(topics = {"follow", "like", "comment", "reply", "chatting"}, groupId = "group_1")
     public void listen(NotificationMessage notificationMessage) {
         String nickname = notificationMessage.getSendedMember();
 
