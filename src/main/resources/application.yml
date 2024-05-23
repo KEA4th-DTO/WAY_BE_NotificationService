@@ -1,10 +1,10 @@
 spring:
   application:
     name: way.notification
-  config:
-    import:
-      - application-db.yml
-      - application-keys.yml
+  # config:
+  #   import:
+  #     - application-db.yml
+  #     - application-keys.yml
   data:
     mongodb:
 #      host: ${MONGODB_DB_HOST}
