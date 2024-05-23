@@ -13,7 +13,7 @@ spring:
 #      database: ${MONGODB_DB_DATABASE}
 #      username: ${MONGODB_DB_USER}
 #      password: ${MONGODB_DB_PASSWORD}
-      uri: ${MONGODB_DB_URI}
+      # uri: ${MONGODB_DB_URI}
   kafka:
     bootstrap-servers: 10.109.201.158:9092
     template:
