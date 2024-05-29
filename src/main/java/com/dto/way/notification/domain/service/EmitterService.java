@@ -24,19 +24,19 @@ public class EmitterService {
     private final NotificationService notificationService;
     private final EmitterRepository emitterRepository;
 
-    @KafkaListener(topics = {"follow", "like", "comment", "reply", "chatting"}, groupId = "group_1")
+    @KafkaListener(topics = {"follow", "like", "comment", "reply"}, groupId = "group_1")
     public void listen(NotificationMessage notificationMessage) {
-        String nickname = notificationMessage.getSendedMember();
 
         Notification notification = Notification.builder()
-                .nickname(nickname)
+                .memberId(notificationMessage.getMemberId())
+                .nickname(notificationMessage.getSendedMember())
                 .message(notificationMessage.getMessage())
                 .createdAt(LocalDateTime.now())
                 .build();
 
         notificationService.insertNotification(notification);
 
-        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmittersStartWithByNickname(nickname);
+        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmittersStartWithByMemberId(notificationMessage.getMemberId());
         sseEmitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
@@ -57,8 +57,8 @@ public class EmitterService {
         }
     }
 
-    public SseEmitter addEmitter(String nickname, String lastEventId) {
-        String emitterId = nickname + "_" + System.currentTimeMillis();
+    public SseEmitter addEmitter(Long memberId, String lastEventId) {
+        String emitterId = memberId + "_" + System.currentTimeMillis();
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
         log.info("emitterId = {} 사용자-emitter 연결!", emitterId);
 
@@ -75,7 +75,7 @@ public class EmitterService {
         sendToClient(emitter, emitterId, "connected!!");
 
         if (!lastEventId.isEmpty()) {
-            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithByNickname(nickname);
+            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithByMemberId(memberId);
             events.entrySet().stream()
                     .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
                     .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));

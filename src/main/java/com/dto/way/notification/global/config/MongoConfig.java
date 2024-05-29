@@ -23,7 +23,7 @@ public class MongoConfig {
     @Autowired
     private MongoMappingContext mongoMappingContext;
 
-    @Value("${SPRING_DATA_MONGODB_URI}")
+    @Value("${spring.data.mongodb.uri}")
     private String mongoDBConnection;
 
     @Bean

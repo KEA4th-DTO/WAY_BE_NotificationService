@@ -18,6 +18,7 @@ public class Notification {
 
     @MongoId
     private String id;
+    private Long memberId;
     private String nickname;
     private String message;
     private LocalDateTime createdAt;

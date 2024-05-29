@@ -1,6 +1,6 @@
 package com.dto.way.notification.global.config;
 
-import com.dto.way.notification.global.JwtTokenProvider;
+import com.dto.way.notification.global.JwtUtils;
 import com.dto.way.notification.global.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -27,15 +27,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers("/member-service/login").permitAll()
-                        .requestMatchers("/member-service/signup").permitAll()
-                        .requestMatchers("/member-service/recreate-token").permitAll()
-                        .requestMatchers("/member-service/logout").permitAll()
-                        .requestMatchers("/member-service/test-cloud").permitAll()
+                        .requestMatchers("/", "/notification-service/v3/api-docs/**", "/notification-service/swagger-ui/**", "/notification-service/swagger-resources/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

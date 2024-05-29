@@ -26,15 +26,15 @@ public class EmitterRepository {
         return emiiters;
     }
 
-    public Map<String, SseEmitter> findAllEmittersStartWithByNickname(String nickname) {
+    public Map<String, SseEmitter> findAllEmittersStartWithByMemberId(Long memberId) {
         return emiiters.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(nickname))
+                .filter(entry -> entry.getKey().startsWith(String.valueOf(memberId)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public Map<String, Object> findAllEventCacheStartWithByNickname(String nickname) {
+    public Map<String, Object> findAllEventCacheStartWithByMemberId(Long memberId) {
         return eventCache.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(nickname))
+                .filter(entry -> entry.getKey().startsWith(String.valueOf(memberId)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

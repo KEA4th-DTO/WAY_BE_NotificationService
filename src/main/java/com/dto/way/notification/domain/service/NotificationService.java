@@ -19,7 +19,7 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public List<Notification> selectNotificationList(String nickname) {
-        return notificationRepository.findByNickname(nickname);
+    public List<Notification> selectNotificationList(Long memberId) {
+        return notificationRepository.findByMemberId(memberId);
     }
 }

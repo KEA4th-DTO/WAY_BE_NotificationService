@@ -1,6 +1,6 @@
 package com.dto.way.notification.global.filter;
 
-import com.dto.way.notification.global.JwtTokenProvider;
+import com.dto.way.notification.global.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -17,15 +17,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtils jwtUtils;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         String token = resolveToken((HttpServletRequest) request);
 
-        if (token != null && jwtTokenProvider.validateToken(token).isValid()) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        if (token != null && jwtUtils.validateToken(token).isValid()) {
+            Authentication authentication = jwtUtils.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
