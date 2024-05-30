@@ -26,6 +26,7 @@ public class EmitterService {
 
     @KafkaListener(topics = {"follow", "like", "comment", "reply"}, groupId = "group_1")
     public void listen(NotificationMessage notificationMessage) {
+        log.info("Received Kafka message: {}", notificationMessage);
 
         Notification notification = Notification.builder()
                 .memberId(notificationMessage.getMemberId())
@@ -34,41 +35,42 @@ public class EmitterService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+        log.info("Built notification: {}", notification);
         notificationService.insertNotification(notification);
+        log.info("Notification inserted into DB");
 
         Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmittersStartWithByMemberId(notificationMessage.getMemberId());
-        sseEmitters.forEach(
-                (key, emitter) -> {
-                    emitterRepository.saveEventCache(key, notification);
-                    sendToClient(emitter, key, notification);
-                }
-        );
+        log.info("Found SSE Emitters: {}", sseEmitters);
+
+        sseEmitters.forEach((key, emitter) -> {
+            emitterRepository.saveEventCache(key, notification);
+            log.info("Event cached with key: {}", key);
+            sendToClient(emitter, key, notification);
+        });
     }
 
     private void sendToClient(SseEmitter emitter, String emitterId, Object data) {
         try {
-            emitter.send(SseEmitter.event()
-                    .id(emitterId)
-                    .data(data));
-            log.info("Kafka로 부터 전달 받은 메세지 전송. emitterId = {}, message = {}", emitterId, data);
+            emitter.send(SseEmitter.event().id(emitterId).data(data));
+            log.info("Sent message to client. emitterId = {}, message = {}", emitterId, data);
         } catch (IOException e) {
             emitterRepository.deleteByEmitterId(emitterId);
-            log.error("메세지 전송 에러 = {}", e);
+            log.error("Error sending message to client: {}", e.getMessage());
         }
     }
 
     public SseEmitter addEmitter(Long memberId, String lastEventId) {
         String emitterId = memberId + "_" + System.currentTimeMillis();
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
-        log.info("emitterId = {} 사용자-emitter 연결!", emitterId);
+        log.info("Emitter connected: emitterId = {}", emitterId);
 
         emitter.onCompletion(() -> {
-            log.info("onCompletion callback");
+            log.info("Emitter completed: emitterId = {}", emitterId);
             emitterRepository.deleteByEmitterId(emitterId);
         });
 
         emitter.onTimeout(() -> {
-            log.info("onTimeout callback");
+            log.info("Emitter timeout: emitterId = {}", emitterId);
             emitterRepository.deleteByEmitterId(emitterId);
         });
 
@@ -90,10 +92,10 @@ public class EmitterService {
         allEmitters.forEach((key, emitter) -> {
             try {
                 emitter.send(SseEmitter.event().id(key).name("heartbeat").data(""));
-                log.info("하트비트 메세지 전송");
+                log.info("Heartbeat message sent: key = {}", key);
             } catch (IOException e) {
                 emitterRepository.deleteByEmitterId(key);
-                log.info("하트비트 메세지 전송 실패 = {}", e.getMessage());
+                log.error("Error sending heartbeat message: {}", e.getMessage());
             }
         });
     }
