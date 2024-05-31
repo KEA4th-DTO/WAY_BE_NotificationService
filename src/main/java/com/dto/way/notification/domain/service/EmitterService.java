@@ -30,7 +30,7 @@ public class EmitterService {
 
         Notification notification = Notification.builder()
                 .memberId(notificationMessage.getTargetMemberId())
-                .nickname(notificationMessage.getTargetMemberNickName())
+                .nickname(notificationMessage.getTargetMemberNickname())
                 .message(notificationMessage.getMessage())
                 .createdAt(LocalDateTime.now())
                 .build();
