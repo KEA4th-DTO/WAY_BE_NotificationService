@@ -30,7 +30,7 @@ public class NotificationController {
     private final JwtUtils jwtUtils;
 
     @GetMapping(value = "/sse-connection", produces = "text/event-stream")
-    public ApiResponse<SseEmitter> stream(HttpServletRequest request,
+    public SseEmitter stream(HttpServletRequest request,
                              @RequestHeader(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId) {
 
         // 토큰에서 요청 유저 정보 추출
@@ -40,8 +40,7 @@ public class NotificationController {
         Long loginMemberId = claims.get("memberId", Long.class);
 
         // 이메일 대신 memberId 들어가야 함
-        SseEmitter sseEmitter = emitterService.addEmitter(loginMemberId, lastEventId);
-        return ApiResponse.of(_OK, sseEmitter);
+        return emitterService.addEmitter(loginMemberId, lastEventId);
     }
 
     // memberID 가지고 알림 목록 조회 api
