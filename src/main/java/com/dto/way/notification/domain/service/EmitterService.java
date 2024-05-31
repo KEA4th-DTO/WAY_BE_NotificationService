@@ -29,8 +29,8 @@ public class EmitterService {
         log.info("Received Kafka message: {}", notificationMessage);
 
         Notification notification = Notification.builder()
-                .memberId(notificationMessage.getMemberId())
-                .nickname(notificationMessage.getSendedMember())
+                .memberId(notificationMessage.getTargetMemberId())
+                .nickname(notificationMessage.getTargetMemberNickName())
                 .message(notificationMessage.getMessage())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -39,7 +39,7 @@ public class EmitterService {
         notificationService.insertNotification(notification);
         log.info("Notification inserted into DB");
 
-        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmittersStartWithByMemberId(notificationMessage.getMemberId());
+        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmittersStartWithByMemberId(notificationMessage.getTargetMemberId());
         log.info("Found SSE Emitters: {}", sseEmitters);
 
         sseEmitters.forEach((key, emitter) -> {
