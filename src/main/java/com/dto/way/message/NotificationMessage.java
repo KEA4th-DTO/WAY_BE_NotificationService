@@ -11,7 +11,7 @@ public class NotificationMessage {
 
     private Long targetMemberId;
     private String message;
-    private String targetMemberNickName;
+    private String targetMemberNickname;
     private LocalDateTime createdAt;
 
 }
