@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Document(collection = "notification")
@@ -23,4 +25,6 @@ public class Notification {
     private String message;
     private LocalDateTime createdAt;
     private boolean isRead;
+    @Indexed(name = "expireAt", expireAfterSeconds = 0)
+    private Instant expireAt;
 }

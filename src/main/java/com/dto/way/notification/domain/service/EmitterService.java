@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 @Service
@@ -33,6 +35,7 @@ public class EmitterService {
                 .nickname(notificationMessage.getTargetMemberNickname())
                 .message(notificationMessage.getMessage())
                 .createdAt(LocalDateTime.now())
+                .expireAt(Instant.now().plus(1, ChronoUnit.DAYS))
                 .build();
 
         log.info("Built notification: {}", notification);
