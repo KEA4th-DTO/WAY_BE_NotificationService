@@ -20,7 +20,8 @@ public class NotificationService {
     }
 
     public List<Notification> selectNotificationList(Long memberId) {
-        return notificationRepository.findByMemberId(memberId);
+        return notificationRepository.findByMemberIdOrderByCreatedAtDesc(memberId);
+
     }
 
     public boolean deleteNotification(String id) {
