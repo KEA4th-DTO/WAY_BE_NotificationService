@@ -9,15 +9,13 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
-import java.util.Map;
 
-import static com.dto.way.notification.web.response.code.status.SuccessStatus._OK;
+import static com.dto.way.notification.web.response.code.status.SuccessStatus.*;
+import static com.dto.way.notification.web.response.code.status.ErrorStatus.*;
 
 @RestController
 @Slf4j
@@ -57,4 +55,15 @@ public class NotificationController {
         return ApiResponse.of(_OK, notificationList);
     }
 
+    @DeleteMapping("/notification/delete/{id}")
+    public ApiResponse deleteNotification(@PathVariable("id") String id) {
+
+        boolean deleted = notificationService.deleteNotification(id);
+
+        if (deleted) {
+            return ApiResponse.of(NOTIFICATION_DELETED, null);
+        } else {
+            return ApiResponse.onFailure(NOTIFICATION_NOT_SENDED.getCode(), NOTIFICATION_NOT_SENDED.getMessage(), null);
+        }
+    }
 }

@@ -22,4 +22,13 @@ public class NotificationService {
     public List<Notification> selectNotificationList(Long memberId) {
         return notificationRepository.findByMemberId(memberId);
     }
+
+    public boolean deleteNotification(String id) {
+        if (id.isEmpty()) {
+            return false;
+        } else {
+            notificationRepository.deleteById(id);
+            return true;
+        }
+    }
 }
