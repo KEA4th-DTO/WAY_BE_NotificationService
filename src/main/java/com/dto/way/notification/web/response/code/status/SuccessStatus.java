@@ -35,7 +35,7 @@ public enum SuccessStatus implements BaseCode {
 
     // 알림 응답
     NOTIFICATION_SENDED(HttpStatus.OK, "NOTIFICATION2001", "알림이 전송되었습니다."),
-
+    NOTIFICATION_DELETED(HttpStatus.OK, "NOTIFICATION2002", "알림이 삭제되었습니다."),
     ;
 
 

@@ -23,4 +23,13 @@ public class NotificationService {
         return notificationRepository.findByMemberIdOrderByCreatedAtDesc(memberId);
 
     }
+
+    public boolean deleteNotification(String id) {
+        if (id.isEmpty()) {
+            return false;
+        } else {
+            notificationRepository.deleteById(id);
+            return true;
+        }
+    }
 }
