@@ -6,6 +6,7 @@ import com.dto.way.notification.domain.service.NotificationService;
 import com.dto.way.notification.global.JwtUtils;
 import com.dto.way.notification.web.response.ApiResponse;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class NotificationController {
     }
 
     // memberID 가지고 알림 목록 조회 api
+    @Operation(summary = "알림목록 조회 API", description = "사용자의 알림 목록을 조회하는 API 입니다.")
     @PostMapping("/notification-list")
     public ApiResponse<List<Notification>> readNotifications(HttpServletRequest request) {
 
@@ -55,6 +57,7 @@ public class NotificationController {
         return ApiResponse.of(_OK, notificationList);
     }
 
+    @Operation(summary = "알림 삭제 API", description = "사용자가 알림목록에서 알림을 삭제하는 API 입니다. ")
     @DeleteMapping("/notification/delete/{id}")
     public ApiResponse deleteNotification(@PathVariable("id") String id) {
 
