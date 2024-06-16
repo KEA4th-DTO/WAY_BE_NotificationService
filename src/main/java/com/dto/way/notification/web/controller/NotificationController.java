@@ -33,10 +33,7 @@ public class NotificationController {
                              @RequestHeader(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId) {
 
         // 토큰에서 요청 유저 정보 추출
-        String token = jwtUtils.resolveToken(request);
-        Claims claims = jwtUtils.parseClaims(token);
-
-        Long loginMemberId = claims.get("memberId", Long.class);
+        Long loginMemberId = getMemberIdByRequest(request);
 
         // 이메일 대신 memberId 들어가야 함
         return emitterService.addEmitter(loginMemberId, lastEventId);
@@ -48,10 +45,7 @@ public class NotificationController {
     public ApiResponse<List<Notification>> readNotifications(HttpServletRequest request) {
 
         // 토큰에서 요청 유저 정보 추출
-        String token = jwtUtils.resolveToken(request);
-        Claims claims = jwtUtils.parseClaims(token);
-
-        Long loginMemberId = claims.get("memberId", Long.class);
+        Long loginMemberId = getMemberIdByRequest(request);
 
         List<Notification> notificationList = notificationService.selectNotificationList(loginMemberId);
         return ApiResponse.of(_OK, notificationList);
@@ -68,5 +62,16 @@ public class NotificationController {
         } else {
             return ApiResponse.onFailure(NOTIFICATION_NOT_SENDED.getCode(), NOTIFICATION_NOT_SENDED.getMessage(), null);
         }
+    }
+
+    private Long getMemberIdByRequest(HttpServletRequest request) {
+
+        String token = jwtUtils.resolveToken(request);
+        Claims claims = jwtUtils.parseClaims(token);
+
+        Long loginMemberId = claims.get("memberId", Long.class);
+        log.info("loginMemberId " + claims.get("memberId"));
+
+        return loginMemberId;
     }
 }
